@@ -5,16 +5,19 @@ type CreateWalletParams = {
 	bitgoAccessToken: string;
 	coin: string;
 	walletPassPhrase: string;
+  enterpriseId: string;
 };
 async function createWallet({
 	bitgoAccessToken,
 	coin,
 	walletPassPhrase,
+  enterpriseId,
 }: CreateWalletParams) {
   const bitgo = new BitGo({accessToken: bitgoAccessToken, env: 'test'});
   const bitgoCoin = bitgo.coin(coin);
   const multisigType = bitgoCoin.supportsTss ? 'tss' : bitgoCoin.supportsBlsDkg ? 'blsdkg' : 'onchain';
   const res = await bitgoCoin.wallets().generateWallet({
+    enterprise: enterpriseId,
     label: 'Hello Activate ' + new Date().toString(),
     passphrase: walletPassPhrase,
     multisigType,
@@ -34,10 +37,29 @@ const prompts = [
 				env: "test",
 			});
 			try {
-				await bitgo.me();
+        const user = await bitgo.me();
+        console.log(`welcome back ${user.name.full}`);
 				return true;
 			} catch (e) {
 				return `Failed to authenticate, ${e}`;
+			}
+		},
+	},
+  {
+		type: "input",
+		name: "enterpriseId",
+		message: "BitGo testnet enterpriseId:",
+		validate: async function (enterpriseId, answers) {
+			const bitgo = new BitGo({
+				accessToken: answers.bitgoAccessToken,
+				env: "test",
+			});
+			try {
+        const enterprise = await bitgo.get(bitgo.url(`/enterprise/${enterpriseId}`, 2));
+        console.log(` enterprise ${enterprise.body.name}`);
+				return true;
+			} catch (e) {
+				return `Failed to fetch enterprise, ${e}`;
 			}
 		},
 	},

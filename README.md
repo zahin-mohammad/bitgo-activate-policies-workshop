@@ -12,3 +12,9 @@
     - Install packages with `yarn` or `npm install`
 
 ## Workshop
+### Pre-Requisite
+- access to a testnet enterprise
+    - have 2 admin users on the enterprise
+    - note down the enterpriseId! It will be used later.
+- an access token created from 1 admin user
+- 
