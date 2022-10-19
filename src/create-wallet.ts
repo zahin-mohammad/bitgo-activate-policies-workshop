@@ -6,16 +6,20 @@ type CreateWalletParams = {
 	coin: string;
 	walletPassPhrase: string;
   enterpriseId: string;
+  user2Email: string;
 };
 async function createWallet({
 	bitgoAccessToken,
 	coin,
 	walletPassPhrase,
   enterpriseId,
+  user2Email,
 }: CreateWalletParams) {
   const bitgo = new BitGo({accessToken: bitgoAccessToken, env: 'test'});
   const bitgoCoin = bitgo.coin(coin);
   const multisigType = bitgoCoin.supportsTss ? 'tss' : bitgoCoin.supportsBlsDkg ? 'blsdkg' : 'onchain';
+
+  console.log("\n\ncreating wallet, this might take a few seconds....");
   const res = await bitgoCoin.wallets().generateWallet({
     enterprise: enterpriseId,
     label: 'Hello Activate ' + new Date().toString(),
@@ -24,6 +28,13 @@ async function createWallet({
   });
   console.log(res);
   console.log('walletId', res.wallet.id());
+
+  console.log(`\n\nsharing wallet with ${user2Email}`)
+  await res.wallet.shareWallet({
+    email: user2Email,
+    walletPassphrase: walletPassPhrase,
+    permissions: 'admin',
+  });
 }
 
 const prompts = [
@@ -103,6 +114,17 @@ const prompts = [
 		validate: function (passphraseValidate, answers) {
       if (passphraseValidate !== answers.walletPassPhrase) {
         return 'Passphrase must match!';
+      }
+      return true;
+		},
+	},
+  {
+		type: "input",
+		name: "user2Email",
+		message: "Invite user? (email):",
+		validate: function (user2Email) {
+      if (!user2Email || user2Email === "") {
+        return 'Must invite another user for this demo :)';
       }
       return true;
 		},

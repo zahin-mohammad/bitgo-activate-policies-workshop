@@ -16,6 +16,7 @@
   },
   "scripts": {
     "create-wallet": "ts-node ./src/create-wallet.ts",
+    "join-wallets": "ts-node ./src/join-wallet.ts",
     "create-policy": "ts-node ./src/create-policy.ts",
     "create-transaction": "ts-node ./src/create-transaction.ts",
     "approve-pending-approval": "ts-node ./src/approve-pending-approval"
