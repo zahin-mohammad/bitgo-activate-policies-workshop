@@ -28,13 +28,13 @@ async function joinWallet({
 		}
 		return true;
 	});
-	console.log(`accepting ${walletShares.length} wallet shares`);
+	console.log(`\n\naccepting ${walletShares.length} wallet shares`);
 	for (const walletShare of walletShares) {
 		await bitgo.coin(walletShare.coin).wallets().acceptShare({
 			walletShareId: walletShare.id,
 			userPassword: loginPassword,
 		});
-		console.log(`accepted wallet share for wallet: ${walletShare.wallet}`);
+		console.log(`\n\naccepted wallet share for wallet: ${walletShare.wallet}`);
 		const wallet = await bitgo
 			.coin(walletShare.coin)
 			.wallets()
