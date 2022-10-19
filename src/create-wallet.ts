@@ -16,6 +16,7 @@ async function createWallet({
   user2Email,
 }: CreateWalletParams) {
   const bitgo = new BitGo({accessToken: bitgoAccessToken, env: 'test'});
+  await bitgo.unlock({otp: '000000'});
   const bitgoCoin = bitgo.coin(coin);
   const multisigType = bitgoCoin.supportsTss ? 'tss' : bitgoCoin.supportsBlsDkg ? 'blsdkg' : 'onchain';
 
@@ -33,7 +34,7 @@ async function createWallet({
   await res.wallet.shareWallet({
     email: user2Email,
     walletPassphrase: walletPassPhrase,
-    permissions: 'admin',
+    permissions: 'view,spend,admin',
   });
 }
 
