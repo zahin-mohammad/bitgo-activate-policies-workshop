@@ -368,11 +368,10 @@ if (require.main === module) {
                                             console.log(wallet);
                                         } else if (params.enterpriseId) {
                                             const res = await getAllWallets({coin: base.coin, enterpriseId: params.enterpriseId})
-                                            console.log(res.wallets)
                                             res.wallets?.forEach((wallet) => {
                                                 console.log({
                                                     label: wallet.label,
-                                                    id: wallet.label,
+                                                    id: wallet.id,
                                                     spendableBalanceString: wallet.spendableBalanceString,
                                                 })
                                             })
