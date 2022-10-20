@@ -12,7 +12,12 @@ const bitgo = new BitGo({ env: "test" });
  * Hint: view getPendingApproval to see how to access the pending approval objects in the SDK
  */
 async function approvePendingApproval(params: BasePrompt & ExercisePrompt) {
-	throw new Error("Implement me!");
+	const pa = await bitgo.coin(params.coin).pendingApprovals().get({ id: params.pendingApprovalId });
+	const approval = await pa.approve({
+		walletPassphrase: params.loginPassword,
+		otp: "000000",
+	});
+	console.log(approval);
 }
 
 /*
@@ -46,12 +51,22 @@ async function startWhitelistPolicyExercise(
 		console.log("task done!");
 		return;
 	}
-	throw new Error("Implement me!");
 	const res = await bitgo
 		.post(
 			bitgo.url(`/${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
 		)
 		.send({
+			id: ruleId,
+			type: "advancedWhitelist",
+			condition: {
+				add: {
+					item: "2mL1GH2KAevXzCQ7qVZGeRUd1C1uzrmNvZ5AysK1WPJm",
+					type: "address"
+				},
+			},
+			action: {
+				type: "deny"
+			}
 			// todo
 		});
 	console.log(res.body);
