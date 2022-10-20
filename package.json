@@ -8,6 +8,7 @@
   "dependencies": {
     "bitgo": "14.3.0",
     "inquirer": "^8.0.0",
+    "node-fetch": "2",
     "prompt": "^1.3.0",
     "readline": "^1.3.0",
     "ts-node": "^10.8.1",
@@ -17,7 +18,8 @@
   "scripts": {
     "create-wallet": "ts-node ./src/create-wallet.ts",
     "join-wallets": "ts-node ./src/join-wallet.ts",
-    "create-policy": "ts-node ./src/create-policy.ts",
+    "send-tx": "ts-node ./src/send-tx.ts",
+    "policy-exercise": "ts-node ./src/manage-policy.ts",
     "create-transaction": "ts-node ./src/create-transaction.ts",
     "approve-pending-approval": "ts-node ./src/approve-pending-approval"
   }
