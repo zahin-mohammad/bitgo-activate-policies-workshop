@@ -15,6 +15,5 @@
 ### Pre-Requisite
 - access to a testnet enterprise
     - have 2 admin users on the enterprise
+        - note down the username and password of the two users as well
     - note down the enterpriseId! It will be used later.
-- an access token created from 1 admin user
-- 
