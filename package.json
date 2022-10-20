@@ -16,11 +16,7 @@
     "typescript-cached-transpile": "^0.0.6"
   },
   "scripts": {
-    "create-wallet": "ts-node ./src/create-wallet.ts",
-    "join-wallets": "ts-node ./src/join-wallet.ts",
-    "send-tx": "ts-node ./src/send-tx.ts",
-    "policy-exercise": "ts-node ./src/manage-policy.ts",
-    "create-transaction": "ts-node ./src/create-transaction.ts",
-    "approve-pending-approval": "ts-node ./src/approve-pending-approval"
+    "manage-wallet": "ts-node ./src/manage-wallet.ts",
+    "policy-exercise": "ts-node ./src/manage-policy.ts"
   }
 }
