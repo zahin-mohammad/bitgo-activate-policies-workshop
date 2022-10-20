@@ -3,10 +3,17 @@ import * as inquirer from "inquirer";
 
 const bitgo = new BitGo({ env: "test" });
 
-
-async function getAllWallets(params: {coin: string, enterpriseId: string}): Promise<any> {
-    // https://developers.bitgo-dev.com/api/v2.wallet.list
-	const res = await bitgo.get(bitgo.url(`/${params.coin}/wallet/?enterprise=${params.enterpriseId}&expandBalance=true&type=hot`, 2));
+async function getAllWallets(params: {
+	coin: string;
+	enterpriseId: string;
+}): Promise<any> {
+	// https://developers.bitgo-dev.com/api/v2.wallet.list
+	const res = await bitgo.get(
+		bitgo.url(
+			`/${params.coin}/wallet/?enterprise=${params.enterpriseId}&expandBalance=true&type=hot`,
+			2
+		)
+	);
 	return res.body;
 }
 
@@ -17,7 +24,7 @@ async function getWalletAPI({
 	coin: string;
 	walletId: string;
 }): Promise<any> {
-    // https://developers.bitgo-dev.com/api/v2.wallet.get
+	// https://developers.bitgo-dev.com/api/v2.wallet.get
 	const res = await bitgo.get(bitgo.url(`/${coin}/wallet/${walletId}`, 2));
 	return res.body;
 }
@@ -34,7 +41,9 @@ async function createWallet(params: BasePrompt & CreateWalletPrompt) {
 	await bitgo.unlock({ otp: "000000" });
 	const res = await bitgoCoin.wallets().generateWallet({
 		enterprise: params.enterpriseId,
-		label:  params.label ? params.label : "Hello Activate " + new Date().toString(),
+		label: params.label
+			? params.label
+			: "Hello Activate " + new Date().toString(),
 		passphrase: params.loginPassword,
 		multisigType,
 	});
@@ -61,8 +70,8 @@ async function joinWallets({
 		otp: "000000",
 	});
 	await bitgo.unlock({ otp: "000000" });
-    
-    // https://developers.bitgo-dev.com/api/v2.wallet.sharing.listallshares
+
+	// https://developers.bitgo-dev.com/api/v2.wallet.sharing.listallshares
 	const res = await bitgo.get(bitgo.url("/walletshares", 2));
 	const walletShares = res.body.incoming.filter((walletShare) => {
 		if (walletId) {
@@ -76,7 +85,9 @@ async function joinWallets({
 			walletShareId: walletShare.id,
 			userPassword: loginPassword,
 		});
-		console.log(`\n\naccepted wallet share for wallet: ${walletShare.wallet}`);
+		console.log(
+			`\n\naccepted wallet share for wallet: ${walletShare.wallet}`
+		);
 		const wallet = await bitgo
 			.coin(walletShare.coin)
 			.wallets()
@@ -87,27 +98,31 @@ async function joinWallets({
 
 async function sendTx(params: BasePrompt & SendTxPrompt) {
 	await bitgo.unlock({ otp: "000000" });
-	const wallet = await bitgo.coin(params.coin).wallets().get({id: params.walletId});
+	const wallet = await bitgo
+		.coin(params.coin)
+		.wallets()
+		.get({ id: params.walletId });
 	const tx = await wallet.prebuildAndSignTransaction({
-        recipients: [{
-            address: params.destination,
-            amount: params.amount,
-        }],
-        walletPassphrase: params.loginPassword,
-		type: 'transfer',
-    });
+		recipients: [
+			{
+				address: params.destination,
+				amount: params.amount,
+			},
+		],
+		walletPassphrase: params.loginPassword,
+		type: "transfer",
+	});
 	const sentTx = await wallet.submitTransaction(tx);
-    console.log("transferId", sentTx.transfer.id);
+	console.log("transferId", sentTx.transfer.id);
 	console.log("status", sentTx.status);
 	console.log("txId", sentTx.txid);
 	if (sentTx.pendingApproval) {
-		console.log(sentTx.pendingApproval.id)
+		console.log(sentTx.pendingApproval.id);
 		console.log(sentTx.pendingApproval.resolvers);
 	} else {
-        console.log('no pending approval needed!')
-    }
+		console.log("no pending approval needed!");
+	}
 }
-
 
 const basePrompt = [
 	{
@@ -155,10 +170,10 @@ const basePrompt = [
 ];
 
 type BasePrompt = {
-    loginEmail: string;
-    loginPassword: string;
-    coin: string;
-}
+	loginEmail: string;
+	loginPassword: string;
+	coin: string;
+};
 
 const exercisePrompt = [
 	{
@@ -181,7 +196,7 @@ const exercisePrompt = [
 				name: "Send a Transaction",
 				value: "sendTx",
 			},
-            {
+			{
 				key: "viewWallet",
 				name: "View Wallet",
 				value: "viewWallet",
@@ -196,11 +211,11 @@ const exercisePrompt = [
 ];
 
 type ExercisePrompt = {
-    step: 'createWallet' | 'joinWallets' | 'sendTx' | 'whoami' | 'viewWallet',
-}
+	step: "createWallet" | "joinWallets" | "sendTx" | "whoami" | "viewWallet";
+};
 
 const createWalletPrompt = [
-    {
+	{
 		type: "input",
 		name: "enterpriseId",
 		message: "BitGo testnet enterpriseId:",
@@ -216,7 +231,7 @@ const createWalletPrompt = [
 			}
 		},
 	},
-    {
+	{
 		type: "input",
 		name: "label",
 		message: "Use a custom wallet label? (optional) ",
@@ -235,22 +250,22 @@ const createWalletPrompt = [
 ];
 
 type CreateWalletPrompt = {
-    enterpriseId: string;
-    label?: string;
-    user2Email: string;
-}
+	enterpriseId: string;
+	label?: string;
+	user2Email: string;
+};
 
 const joinWalletsPrompt = [
 	{
 		type: "input",
 		name: "walletId",
 		message: "Want to join a specific wallet? (walletId):",
-	}
+	},
 ];
 
 type JoinWalletsPrompt = {
-    walletId?: string;
-}
+	walletId?: string;
+};
 
 const viewWalletsPrompt = [
 	{
@@ -258,14 +273,14 @@ const viewWalletsPrompt = [
 		name: "walletId",
 		message: "WalletId (optional):",
 	},
-    {
+	{
 		type: "input",
 		name: "enterpriseId",
 		message: "EnterpriseId:",
-        when: function(answers) {
-            return !answers.walletId;
-        },
-        validate: async function (enterpriseId) {
+		when: function (answers) {
+			return !answers.walletId;
+		},
+		validate: async function (enterpriseId) {
 			try {
 				const enterprise = await bitgo.get(
 					bitgo.url(`/enterprise/${enterpriseId}`, 2)
@@ -276,13 +291,13 @@ const viewWalletsPrompt = [
 				return `Failed to fetch enterprise, ${e}`;
 			}
 		},
-	}
+	},
 ];
 
 type ViewWalletsPrompt = {
-    walletId?: string;
-    enterpriseId?: string;
-}
+	walletId?: string;
+	enterpriseId?: string;
+};
 
 const sendTxPrompt = [
 	{
@@ -304,13 +319,13 @@ const sendTxPrompt = [
 ];
 
 type SendTxPrompt = {
-    walletId: string;
-    destination: string;
-    amount: string;
-}
+	walletId: string;
+	destination: string;
+	amount: string;
+};
 
 if (require.main === module) {
-    inquirer.prompt(basePrompt).then(async (base: BasePrompt) => {
+	inquirer.prompt(basePrompt).then(async (base: BasePrompt) => {
 		while (true) {
 			await bitgo.authenticate({
 				username: base.loginEmail,
@@ -323,70 +338,88 @@ if (require.main === module) {
 					try {
 						switch (exercise.step) {
 							case "createWallet":
-                                await inquirer
-                                    .prompt(createWalletPrompt)
-                                    .then(async (params: CreateWalletPrompt) => {
-                                        console.log(`\n\n`);
-                                        await createWallet({
-                                            ...base,
-                                            ...params,
-                                        });
-                                    });
+								await inquirer
+									.prompt(createWalletPrompt)
+									.then(
+										async (params: CreateWalletPrompt) => {
+											console.log(`\n\n`);
+											await createWallet({
+												...base,
+												...params,
+											});
+										}
+									);
 								break;
 							case "joinWallets":
-                                await inquirer
-                                .prompt(joinWalletsPrompt)
-                                .then(async (params: JoinWalletsPrompt) => {
-                                    await joinWallets({
-                                        ...base,
-                                        ...params,
-                                    });
-                                });
-                                break;
-							case "sendTx":
-                                await inquirer
-                                    .prompt(sendTxPrompt)
-                                    .then(async (params: SendTxPrompt) => {
-                                        console.log(`\n\n`);
-                                        const wallet = await getWalletAPI({
-                                            coin: base.coin,
-                                            walletId: params.walletId,
-                                        });
-                                        console.log(`wallet: ${wallet.label}`);
-                                        await sendTx({
-                                            ...base,
-                                            ...params,
-                                        });
-                                    });
+								await inquirer
+									.prompt(joinWalletsPrompt)
+									.then(async (params: JoinWalletsPrompt) => {
+										await joinWallets({
+											...base,
+											...params,
+										});
+									});
 								break;
-                            case "viewWallet":
-                                await inquirer
-                                    .prompt(viewWalletsPrompt)
-                                    .then(async (params: ViewWalletsPrompt) => {
-                                        console.log(`\n\n`);
-                                        if (params.walletId) {
-                                            const wallet = await getWalletAPI({coin: base.coin, walletId: params.walletId})
-                                            console.log(wallet);
-                                            if (wallet.admin?.policy) {
-                                                console.log("policy rules");
-                                                console.log(wallet.admin.policy.rules);
-                                            }
-											console.log("balance", wallet.spendableBalanceString);
-											console.log("receiveAddress", wallet.receiveAddress?.address);
-                                        } else if (params.enterpriseId) {
-                                            const res = await getAllWallets({coin: base.coin, enterpriseId: params.enterpriseId})
-                                            res.wallets?.forEach((wallet) => {
-                                                console.log({
-                                                    label: wallet.label,
-                                                    id: wallet.id,
-                                                    spendableBalanceString: wallet.spendableBalanceString,
-                                                })
-                                            })
-                                        }
-                                    });
-                                break;
+							case "sendTx":
+								await inquirer
+									.prompt(sendTxPrompt)
+									.then(async (params: SendTxPrompt) => {
+										console.log(`\n\n`);
+										const wallet = await getWalletAPI({
+											coin: base.coin,
+											walletId: params.walletId,
+										});
+										console.log(`wallet: ${wallet.label}`);
+										await sendTx({
+											...base,
+											...params,
+										});
+									});
+								break;
+							case "viewWallet":
+								await inquirer
+									.prompt(viewWalletsPrompt)
+									.then(async (params: ViewWalletsPrompt) => {
+										console.log(`\n\n`);
+										if (params.walletId) {
+											const wallet = await getWalletAPI({
+												coin: base.coin,
+												walletId: params.walletId,
+											});
+											console.log(wallet);
+											if (wallet.admin?.policy) {
+												console.log("policy rules");
+												console.log(
+													wallet.admin.policy.rules
+												);
+											}
+											console.log(
+												"balance",
+												wallet.spendableBalanceString
+											);
+											console.log(
+												"receiveAddress",
+												wallet.receiveAddress?.address
+											);
+										} else if (params.enterpriseId) {
+											const res = await getAllWallets({
+												coin: base.coin,
+												enterpriseId:
+													params.enterpriseId,
+											});
+											res.wallets?.forEach((wallet) => {
+												console.log({
+													label: wallet.label,
+													id: wallet.id,
+													spendableBalanceString:
+														wallet.spendableBalanceString,
+												});
+											});
+										}
+									});
+								break;
 							case "whoami":
-								console.log(`\n\n`)
+								console.log(`\n\n`);
 								const user = await bitgo.me();
 								console.log(`Hey there ${user.name.full}`);
 								break;
@@ -398,7 +431,7 @@ if (require.main === module) {
 					} catch (e) {
 						console.log(e);
 					}
-					console.log(`\n\n`)
+					console.log(`\n\n`);
 				});
 		}
 	});
