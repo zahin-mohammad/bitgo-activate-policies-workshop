@@ -4,8 +4,8 @@ import * as inquirer from "inquirer";
 const bitgo = new BitGo({ env: "test" });
 
 /*
-* Exercises!
-*/
+ * Exercises!
+ */
 
 /*
  * Task: Given a pending approval id in the params, approve the associated pending approval!
@@ -49,7 +49,7 @@ async function startWhitelistPolicyExercise(
 	throw new Error("Implement me!");
 	const res = await bitgo
 		.post(
-			bitgo.url(`${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
+			bitgo.url(`/${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
 		)
 		.send({
 			// todo
@@ -79,7 +79,7 @@ async function startAllTxPolicyExercise(params: BasePrompt & ExercisePrompt) {
 	throw new Error("Implement me!");
 	const res = await bitgo
 		.post(
-			bitgo.url(`${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
+			bitgo.url(`/${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
 		)
 		.send({
 			// todo
@@ -113,7 +113,7 @@ async function startVelocityPolicyExercise(
 	throw new Error("Implement me!");
 	const res = await bitgo
 		.post(
-			bitgo.url(`${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
+			bitgo.url(`/${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
 		)
 		.send({
 			// todo
@@ -324,7 +324,7 @@ if (require.main === module) {
 								});
 								break;
 							case "whoami":
-								console.log(`\n\n`)
+								console.log(`\n\n`);
 								const user = await bitgo.me();
 								console.log(`Hey there ${user.name.full}`);
 								break;
@@ -336,16 +336,15 @@ if (require.main === module) {
 					} catch (e) {
 						console.log(e);
 					}
-					console.log(`\n\n`)
+					console.log(`\n\n`);
 				});
 		}
 	});
 }
 
-
 /*
-* HELPERS
-*/
+ * HELPERS
+ */
 async function getWalletAPI({
 	coin,
 	walletId,
