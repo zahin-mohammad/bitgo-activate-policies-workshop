@@ -190,16 +190,6 @@ const promptBase = [
 				name: "Testnet solana (tss)",
 				value: "tsol",
 			},
-			{
-				key: "tbtc",
-				name: "Testnet bitcoin (multisig)",
-				value: "tbtc",
-			},
-			{
-				key: "gteth",
-				name: "Testnet goerli ethereum (multisig)",
-				value: "gteth",
-			},
 		],
 	},
 	{

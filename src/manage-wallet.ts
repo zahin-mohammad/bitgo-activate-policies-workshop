@@ -6,7 +6,7 @@ const bitgo = new BitGo({ env: "test" });
 
 async function getAllWallets(params: {coin: string, enterpriseId: string}): Promise<any> {
     // https://developers.bitgo-dev.com/api/v2.wallet.list
-	const res = await bitgo.get(bitgo.url(`/${params.coin}/wallet/?enterprise=${params.enterpriseId}&expandBalanceboolean=true&`, 2));
+	const res = await bitgo.get(bitgo.url(`/${params.coin}/wallet/?enterprise=${params.enterpriseId}&expandBalance=true&type=hot`, 2));
 	return res.body;
 }
 
@@ -366,6 +366,10 @@ if (require.main === module) {
                                         if (params.walletId) {
                                             const wallet = await getWalletAPI({coin: base.coin, walletId: params.walletId})
                                             console.log(wallet);
+                                            if (wallet.admin?.policy) {
+                                                console.log("policy rules");
+                                                console.log(wallet.admin.policy.rules);
+                                            }
                                         } else if (params.enterpriseId) {
                                             const res = await getAllWallets({coin: base.coin, enterpriseId: params.enterpriseId})
                                             res.wallets?.forEach((wallet) => {
