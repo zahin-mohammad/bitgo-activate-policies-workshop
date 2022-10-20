@@ -40,6 +40,7 @@ async function createWallet(params: BasePrompt & CreateWalletPrompt) {
 	});
 	console.log(res);
 	console.log("walletId", res.wallet.id());
+	console.log("receive address, fund me!!", res.wallet.receiveAddress());
 
 	console.log(`\n\nsharing wallet with ${params.user2Email}`);
 	await res.wallet.shareWallet({
