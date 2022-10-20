@@ -46,22 +46,13 @@ async function startWhitelistPolicyExercise(
 		console.log("task done!");
 		return;
 	}
+	throw new Error("Implement me!");
 	const res = await bitgo
 		.post(
 			bitgo.url(`${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
 		)
 		.send({
-			type: "advancedWhitelist",
-			id: ruleId,
-			condition: {
-				add: {
-					item: "2mL1GH2KAevXzCQ7qVZGeRUd1C1uzrmNvZ5AysK1WPJm",
-					type: "address",
-				},
-			},
-			action: {
-				type: "deny",
-			},
+			// todo
 		});
 	console.log(res.body);
 	if (res.body.pendingApproval) {
@@ -85,17 +76,13 @@ async function startAllTxPolicyExercise(params: BasePrompt & ExercisePrompt) {
 		console.log("task done!");
 		return;
 	}
+	throw new Error("Implement me!");
 	const res = await bitgo
 		.post(
 			bitgo.url(`${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
 		)
 		.send({
-			type: "allTx",
-			id: ruleId,
-			condition: {},
-			action: {
-				type: "getApproval",
-			},
+			// todo
 		});
 
 	console.log(res.body);
@@ -123,22 +110,13 @@ async function startVelocityPolicyExercise(
 		console.log("task done!");
 		return;
 	}
-
+	throw new Error("Implement me!");
 	const res = await bitgo
 		.post(
 			bitgo.url(`${params.coin}/wallet/${params.walletId}/policy/rule`, 2)
 		)
 		.send({
-			type: "velocityLimit",
-			coin: params.coin,
-			id: "my velocity policy rule",
-			condition: {
-				timeWindow: "3600",
-				amountString: "1000000000",
-			},
-			action: {
-				type: "getApproval",
-			},
+			// todo
 		});
 	console.log(res.body);
 	if (res.body.pendingApproval) {
