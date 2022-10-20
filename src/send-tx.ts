@@ -32,6 +32,7 @@ async function sendTx(params: BasePrompt) {
 		console.log(sentTx.pendingApproval.id)
 		console.log(sentTx.pendingApproval.resolvers);
 	}
+	console.log(sentTx.pendingApproval?.id ?? "no pending approval needed :)")
 }
 
 const promptBase = [
