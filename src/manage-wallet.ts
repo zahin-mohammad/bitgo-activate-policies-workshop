@@ -371,6 +371,8 @@ if (require.main === module) {
                                                 console.log("policy rules");
                                                 console.log(wallet.admin.policy.rules);
                                             }
+											console.log("balance", wallet.spendableBalanceString);
+											console.log("receiveAddress", wallet.receiveAddress?.address);
                                         } else if (params.enterpriseId) {
                                             const res = await getAllWallets({coin: base.coin, enterpriseId: params.enterpriseId})
                                             res.wallets?.forEach((wallet) => {
