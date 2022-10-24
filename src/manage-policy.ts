@@ -34,7 +34,7 @@ async function rescindPendingApproval(params: BasePrompt & ExercisePrompt) {
 /*
  * Task: create an advancedWhitelist policy rule that will deny all transactions not in the whitelist
  * Note: You may use 2mL1GH2KAevXzCQ7qVZGeRUd1C1uzrmNvZ5AysK1WPJm as a default whitelist (instructors hot wallet)
- * Hint: https://developers.bitgo-dev.com/api/v2.wallet.createpolicy
+ * Hint: https://developers.bitgo.com/api/v2.wallet.createpolicy
  * 	to see what condition to pass, view the second `object` spec
  *  id is required
  */
@@ -65,7 +65,7 @@ async function startWhitelistPolicyExercise(
 
 /*
  * Task: create an allTx policy rule where all transactions require a pending approval
- * Hint: https://developers.bitgo-dev.com/api/v2.wallet.createpolicy
+ * Hint: https://developers.bitgo.com/api/v2.wallet.createpolicy
  * 	to see what condition to pass, view the sixth `object` spec
  *  in this case, we can use an empty condition object `condition: {}`
  *  id is required
@@ -97,7 +97,7 @@ async function startAllTxPolicyExercise(params: BasePrompt & ExercisePrompt) {
 /*
  * Task: create a velocity limit rule where more than 1 SOL (1000000000 LAMPORTS) in a 1 Hour time frame requires a pending approval
  * HINT: 1 SOL = 1000000000 LAMPORTS (base units of sol)
- *  https://developers.bitgo-dev.com/api/v2.wallet.createpolicy
+ *  https://developers.bitgo.com/api/v2.wallet.createpolicy
  * 	to see what condition to pass, view the first `object` spec
  *  in this case, we can use an empty condition object `condition: {}`
  *  id is required

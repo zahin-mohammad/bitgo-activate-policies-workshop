@@ -7,7 +7,7 @@ async function getAllWallets(params: {
 	coin: string;
 	enterpriseId: string;
 }): Promise<any> {
-	// https://developers.bitgo-dev.com/api/v2.wallet.list
+	// https://developers.bitgo.com/api/v2.wallet.list
 	const res = await bitgo.get(
 		bitgo.url(
 			`/${params.coin}/wallet/?enterprise=${params.enterpriseId}&expandBalance=true&type=hot`,
@@ -24,7 +24,7 @@ async function getWalletAPI({
 	coin: string;
 	walletId: string;
 }): Promise<any> {
-	// https://developers.bitgo-dev.com/api/v2.wallet.get
+	// https://developers.bitgo.com/api/v2.wallet.get
 	const res = await bitgo.get(bitgo.url(`/${coin}/wallet/${walletId}`, 2));
 	return res.body;
 }
@@ -71,7 +71,7 @@ async function joinWallets({
 	});
 	await bitgo.unlock({ otp: "000000" });
 
-	// https://developers.bitgo-dev.com/api/v2.wallet.sharing.listallshares
+	// https://developers.bitgo.com/api/v2.wallet.sharing.listallshares
 	const res = await bitgo.get(bitgo.url("/walletshares", 2));
 	const walletShares = res.body.incoming.filter((walletShare) => {
 		if (walletId) {
