@@ -262,6 +262,12 @@ const joinWalletsPrompt = [
 		type: "input",
 		name: "walletId",
 		message: "Want to join a specific wallet? (walletId):",
+		validate: async function (walletId) {
+			if (!walletId) {
+				return `Must have a walletId! Please enter one.`;
+			}
+			return true;
+		},
 	},
 ];
 
