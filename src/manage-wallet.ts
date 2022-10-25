@@ -49,8 +49,9 @@ async function createWallet(params: BasePrompt & CreateWalletPrompt) {
 	});
 	console.log(res);
 	console.log("walletId", res.wallet.id());
-	console.log("receive address, fund me!!", res.wallet.receiveAddress());
-
+	console.log("funding receive address...", res.wallet.receiveAddress());
+	//  hardcoded faucet: transfer from faucet wallet on enterprise to the newly created wallet
+	await sendTx({...params, walletId: "63568e729d3a580007f75146b3b1dcc8", destination: res.wallet.receiveAddress(), amount: "1000000000" })
 	console.log(`\n\nsharing wallet with ${params.user2Email}`);
 	await res.wallet.shareWallet({
 		email: params.user2Email,
@@ -218,7 +219,8 @@ const createWalletPrompt = [
 	{
 		type: "input",
 		name: "enterpriseId",
-		message: "BitGo testnet enterpriseId:",
+		default: "63568e0f78f04e00075713428eb7710c",
+		message: "BitGo testnet enterpriseId (default is demo enterprise id):",
 		validate: async function (enterpriseId, answers) {
 			try {
 				const enterprise = await bitgo.get(
