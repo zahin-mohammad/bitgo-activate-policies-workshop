@@ -32,7 +32,7 @@ async function rescindPendingApproval(params: BasePrompt & ExercisePrompt) {
 }
 
 /*
- * Task: create an advancedWhitelist policy rule that will deny all transactions not in the whitelist
+ * Task: create an advancedWhitelist policy rule that needs an approval on  all transactions not in the whitelist
  * Note: You may use 2mL1GH2KAevXzCQ7qVZGeRUd1C1uzrmNvZ5AysK1WPJm as a default whitelist (instructors hot wallet)
  * Hint: https://developers.bitgo.com/api/v2.wallet.createpolicy
  * 	to see what condition to pass, view the second `object` spec
