@@ -1,17 +1,16 @@
 import { BitGo } from "bitgo";
 import * as inquirer from "inquirer";
 
-const bitgo = new BitGo({ env: "test" });
+const bitgo = new BitGo({ env: "prod" });
 
 
 async function createWallet(params: BasePrompt & CreateWalletPrompt) {
-	const bitgoCoin = bitgo.coin(params.coin);
+	const bitgoCoin = bitgo.coin('tpolygon');
 	console.log("\n\ncreating wallet, this might take a few seconds....");
 	await bitgo.unlock({ otp: "000000" });
 	const res = await bitgoCoin.wallets().generateWallet({
 		enterprise: params.enterpriseId,
 		label:  params.label ? params.label : "Hello Activate " + new Date().toString(),
-		passphrase: params.loginPassword,
 		multisigType: 'tss',
 		backupProvider: "BitGoKRS",
 		walletVersion: 3,
@@ -23,25 +22,12 @@ async function createWallet(params: BasePrompt & CreateWalletPrompt) {
 const basePrompt = [
 	{
 		type: "input",
-		name: "loginEmail",
-		message: "BitGo testnet login email:",
-		validate: async function (email) {
-			if (!email) {
-				return "Email is required!";
-			}
-			return true;
-		},
-	},
-	{
-		type: "password",
-		name: "loginPassword",
-		message: "BitGo testnet login password:",
-		validate: async function (loginPassword, answers) {
+		name: "accessToken",
+		message: "Prod bearer access token:",
+		validate: async function (accessToken, answers) {
 			try {
-				await bitgo.authenticate({
-					username: answers.loginEmail,
-					password: loginPassword,
-					otp: "000000",
+				await bitgo.authenticateWithAccessToken({
+					accessToken: accessToken
 				});
 				const user = await bitgo.me();
 				console.log(`welcome back ${user.name.full}`);
@@ -54,9 +40,7 @@ const basePrompt = [
 ];
 
 type BasePrompt = {
-	loginEmail: string;
-	loginPassword: string;
-	coin: string;
+	accessToken: string;
 }
 
 const createWalletPrompt = [
@@ -91,12 +75,9 @@ type CreateWalletPrompt = {
 
 if (require.main === module) {
 	inquirer.prompt(basePrompt).then(async (base: BasePrompt) => {
-		base.coin = 'tpolygon';
 		while (true) {
-			await bitgo.authenticate({
-				username: base.loginEmail,
-				password: base.loginPassword,
-				otp: "000000",
+			await bitgo.authenticateWithAccessToken({
+				accessToken: base.accessToken,
 			});
 			await inquirer
 				.prompt(createWalletPrompt)
