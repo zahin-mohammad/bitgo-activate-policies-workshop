@@ -5,7 +5,7 @@ const bitgo = new BitGo({ env: "test" });
 
 
 async function createWallet(params: BasePrompt & CreateWalletPrompt) {
-	const bitgoCoin = bitgo.coin(params.coin);
+	const bitgoCoin = bitgo.coin('tpolygon');
 	console.log("\n\ncreating wallet, this might take a few seconds....");
 	await bitgo.unlock({ otp: "000000" });
 	const res = await bitgoCoin.wallets().generateWallet({
@@ -13,7 +13,6 @@ async function createWallet(params: BasePrompt & CreateWalletPrompt) {
 		label:  params.label ? params.label : "Hello Activate " + new Date().toString(),
 		passphrase: params.loginPassword,
 		multisigType: 'tss',
-		backupProvider: "BitGoKRS",
 		walletVersion: 3,
 	});
 	console.log(res);
@@ -56,7 +55,6 @@ const basePrompt = [
 type BasePrompt = {
 	loginEmail: string;
 	loginPassword: string;
-	coin: string;
 }
 
 const createWalletPrompt = [
@@ -91,7 +89,6 @@ type CreateWalletPrompt = {
 
 if (require.main === module) {
 	inquirer.prompt(basePrompt).then(async (base: BasePrompt) => {
-		base.coin = 'tpolygon';
 		while (true) {
 			await bitgo.authenticate({
 				username: base.loginEmail,
