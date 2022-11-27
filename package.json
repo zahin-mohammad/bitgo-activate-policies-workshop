@@ -6,7 +6,7 @@
   "author": "Zahin Mohammad <zahinmohammad@bitgo.com>",
   "license": "MIT",
   "dependencies": {
-    "bitgo": "14.3.0",
+    "bitgo": "14.7.0",
     "inquirer": "^8.0.0",
     "node-fetch": "2",
     "prompt": "^1.3.0",
